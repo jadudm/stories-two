@@ -1,0 +1,103 @@
+---
+title: Salaries
+weight: 20
+---
+
+
+<p>Staff, it turns out, like to be paid.</p>
+
+<p>Assuming GS15 step 1 (GS15s1):</p>
+
+<ol>
+    <li>with an upward regional adjustment of 20%, and</li>
+    <li>65% overheads (meaning the costs of healthcare, retirement, and so forth),</li>
+</ol> 
+
+<p>we come up with an hourly rate of $<span class="salaryD"></span>/hour.</p>
+
+<p>If we bill $<span class="hourlyrateD"></span>/hour, and pay people $<span class="salaryD"></span>/hour, how many hours of work do we need to bill in order to be cost recoverable?</p>
+
+
+<div class="grid-row">
+    <div class="grid-col-12" style="display: flex; justify-content: center;">
+       <div id="sliderHM"></div>
+    </div>
+</div>
+<div class="grid-row">
+    <canvas id="HM"></canvas>
+</div>
+<div class="grid-row" style="display: flex; justify-content: center; margin: 2em;">
+    <div id="message" style="align: text-center;">
+    &nbsp;
+    </div>
+</div>
+
+<script src="/js/const.js"></script>
+<script src="/js/chart.js"></script>
+
+<script>
+    var labels = ["Bill those hours!"];
+    var datasets = [
+        {
+            data: [c.get("fixed")],
+            label: "The Overhead",
+            backgroundColor: pattern.draw("square", "#5f0f40"), 
+        },
+        {
+            data: [0],
+            label: "Net Income",
+            backgroundColor: pattern.draw("circle", "#9a031e"),
+        },
+        {
+            data: [0],
+            label: "The Salaries",
+            backgroundColor: pattern.draw("diamond", "#fb8b24")
+        }
+    ];
+
+    var ctx = document.getElementById("HM").getContext('2d');
+    vc = new VizChart("HM", {ctx: ctx, labels: labels, datasets: datasets});
+    
+    function incomeFromHours (hrs) {
+        // Hours * Hourly rate / 1M (for scaling)
+        var income = (hrs * c.get("hourlyrate"));
+        return income;
+    }
+
+    function salariesFromHours (hrs) {
+        var salaries = (hrs * c.get("salary"));
+        return salaries;
+    }
+
+    function callback (hrs) {
+        // Set the income.
+        var income = incomeFromHours(hrs);
+        var salaries = salariesFromHours(hrs);
+        var net = income - salaries;
+
+        vc.setDatasetIndex(1, [ net ]);
+        vc.setDatasetIndex(2, [ salaries ]);
+
+        var message = "";
+        if (net < c.get("fixed")) {
+            message = "Not there yet.";
+        } else {
+            message = String.fromCodePoint(0x1F4B5)
+                + " We cleared the $" + c.get("fixedD") + "M with " 
+                + Math.floor(hrs) 
+                + " hours billed." 
+                + String.fromCodePoint(0x1F4B5);
+        }
+        document.getElementById("message").innerHTML = message;
+    };
+
+    slidercfg = {width: 400, 
+        callback: callback, 
+        min: 0,
+        max: 80000,
+        value: 1000,
+    };
+
+    slider = new VizSlider("HM", slidercfg);
+    vc.update();
+</script>

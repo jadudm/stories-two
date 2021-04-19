@@ -1,0 +1,78 @@
+---
+title: Easy-Peasy!
+weight: 10
+---
+
+<p>18F is required to earn $<span class="fixedD"></span>M every year.</p>
+
+<p>This story is not about why that is true. It simply <i>is</i>.</p>
+
+<p>18F bills staff out at a rate of $<span class="hourlyrateD"></span>/hour. </p>
+
+<p>How many hours do we need to bill in order to make $<span class="fixedD"></span>M?</p>
+
+<div class="grid-row">
+    <div class="grid-col-12" style="display: flex; justify-content: center;">
+       <div id="sliderHM"></div>
+    </div>
+</div>
+<div class="grid-row">
+    <canvas id="HM"></canvas>
+</div>
+<div class="grid-row" style="display: flex; justify-content: center; margin: 2em;">
+    <div id="message" style="align: text-center;">
+    &nbsp;
+    </div>
+</div>
+
+<script src="/js/const.js"></script>
+<script src="/js/chart.js"></script>
+
+<script>
+
+    var labels = ["Bill those hours!"];
+    var datasets = [
+        {
+            label: "The Overhead",
+            data: [c.get("fixed")],
+            backgroundColor: pattern.draw("square", "#5f0f40"), 
+        },
+        {
+            label: "The Income",
+            data: [0],
+            backgroundColor: pattern.draw("circle", "#9a031e"),
+        },
+    ];
+    var ctx = document.getElementById("HM").getContext('2d');
+
+    vc = new VizChart("HM", {ctx: ctx, labels: labels, datasets: datasets});
+
+    function slider_callback (val) {
+        // Hours * Hourly rate / 1M (for scaling)
+        var income = (val * c.get("hourlyrate"));
+        vc.setDatasetIndex(1, [ income ]);
+
+        var message = "";
+        if (income < c.get("fixed")) {
+            message = "Not there yet.";
+        } else {
+            message = String.fromCodePoint(0x1F4B5)
+                + " We cleared the $" + c.get("fixed") + " with "
+                + Math.floor(val) 
+                + " hours billed." 
+                + String.fromCodePoint(0x1F4B5);
+        }
+        document.getElementById("message").innerHTML = message;
+    };
+
+    slidercfg = {width: 400, 
+        callback: slider_callback, 
+        min: 0,
+        max: 60000,
+        value: 1000,
+    };
+    slider = new VizSlider("HM", slidercfg);
+    slider.setCallbacks(slider_callback);
+    vc.update();
+</script>
+

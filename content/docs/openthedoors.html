@@ -1,0 +1,122 @@
+---
+title: Open the Doors
+weight: 30
+---
+ 
+<p><b>72K hours.</b></p>
+
+<p>At first glance, it seems like 18F needs to bill <span class="khoursneeded"></span>kh (<span class="khoursneeded"></span> kilohours) to be fully cost recoverable.</p>
+
+<p>How many staff do we need to bill <span class="khoursneeded"></span>kh in a year?</p>
+
+<div class="grid-row">
+    <div class="grid-col-12" style="display: flex; justify-content: center;">
+        <p><small>Staff</small></p>
+       <div id="sliderSH"></div>
+    </div>
+</div>
+<div class="grid-row">
+    <canvas id="SH"></canvas>
+</div>
+<div class="grid-row" style="display: flex; justify-content: center; margin: 2em;">
+    <div id="message" style="align: text-center;">
+    &nbsp;
+    </div>
+</div>
+
+<script src="/js/const.js"></script>
+<script src="/js/chart.js"></script>
+
+<script>
+    var labels = ["Keep on billin'!"]
+    var datasets = [
+        {
+            data: [c.get("fixed")],
+            label: "The Overhead",
+            backgroundColor: pattern.draw("square", "#5f0f40"), 
+        },
+        {
+            data: [0],
+            label: "Net Income",
+            backgroundColor: pattern.draw("circle", "#9a031e"),
+        },
+        {
+            data: [0],
+            label: "The Salaries",
+            backgroundColor: pattern.draw("diamond", "#fb8b24")
+        }
+    ]
+
+    function incomeFromHours (hrs) {
+        // Hours * Hourly rate / 1M (for scaling)
+        var income = (hrs * c.get("hourlyrate"));
+        return income;
+    }
+
+    function salariesFromHours (hrs) {
+        var salaries = (hrs * c.get("salary"));
+        return salaries;
+    }
+
+    var ctx = document.getElementById("SH").getContext('2d');
+    vc = new VizChart("SH", {ctx: ctx, labels: labels, datasets: datasets});
+    
+
+    function callback (staff) {
+        // Calc hours from staff
+        hrs = staff * 52 * 40;
+        // Set the income.
+        var income = incomeFromHours(hrs);
+        var salaries = salariesFromHours(hrs);
+        var net = income - salaries;
+
+        vc.setDatasetIndex(1, [ net ]);
+        vc.setDatasetIndex(2, [ salaries ]);
+        
+        var message = "";
+        if (net < c.get("fixed")) {
+            message = "Not there yet.";
+        } else {
+            message = String.fromCodePoint(0x1F4B5)
+                + " We cleared the $" + c.get("fixed") + "M with " 
+                + Math.floor(staff) 
+                + " staff. " 
+                + String.fromCodePoint(0x1F4B5);
+        }
+        document.getElementById("message").innerHTML = message;
+    };
+
+    slidercfg = {width: 400, 
+        callback: callback, 
+        min: 0,
+        max: 150,
+        value: 5,
+    };
+    slider = new VizSlider("SH", slidercfg);
+    vc.update();
+</script>
+
+
+<p>
+From <a href="https://www.youtube.com/watch?v=d4ftmOI5NnI"><em>The Princess Bride</em></a>:
+</p>
+
+<blockquote style="background: #DDDDDD; padding: 1em;">
+<b>Miracle Max</b>: Sonny, true love is the greatest thing in the world... But that's not what he said! He distinctly said "to blave." And, as we all know, "to blave" means "to bluff," huh?
+</blockquote>
+
+<p>
+    This visualization is true if staff bill all 52 weeks per year, 40 hours every week.
+</p>
+
+<p>
+    That is, it is only true if no one has any time off, there are no gaps of any sort in billing. Put simply, there is <b>zero</b> non-billable time.
+</p>
+
+<p>
+    Anyone who thinks this is a good idea is welcome to take a job at a startup, or any job in education, where endless hours are considered the norm. <b>This is absolutely not the reality for 18F.</b>
+</p>
+
+<p>
+    Our high staffing churn (requiring substantial time spent hiring), the highly variable leave amongst staff (career staff tend to have more leave accumulated), and other factors significantly impact our ability to make our cost recovery targets.
+</p>
