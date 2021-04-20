@@ -3,4 +3,4 @@ languageCode = "en-us"
 title = "Some Stories"
 
 [params]
-    base = ""
+    base = "/site/jadudm/stories-two"

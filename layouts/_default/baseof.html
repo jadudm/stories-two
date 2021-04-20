@@ -82,8 +82,8 @@
 
   {{ range $.Site.Pages.ByWeight }}
     {{ if and (not .IsSection) (in .Permalink "docs")  }}
-        <script>console.log("- {{$.Site.Params.base}}{{ .Permalink }}");</script>
-        <li class='usa-sidenav__item'> <a href="{{$.Site.Params.base}}{{ .Permalink }}">{{ .Title }}</a> </li>
+        <script>console.log("- {{$.Site.Params.base}} - {{ .Permalink }}");</script>
+        <li class='usa-sidenav__item'> <a href="{{ .Permalink }}">{{ .Title }}</a> </li>
     {{ end }}
   {{ end }}
 
