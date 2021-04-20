@@ -5,7 +5,7 @@ weight: 40
 
 <p>Let's ask the question another way.</p>
 
-<p>If we need to bill 66kh in a year to clear ${{ site.data.constants.fixed }}M, how many staff is that *depending on how many weeks and hours the staff work*?</p>
+<p>If we need to bill 66kh in a year to clear $<span class="fixedD"></span>M, how many staff is that *depending on how many weeks and hours the staff work*?</p>
 
 <p>If staff bill 52 weeks/year, 40h/week, we apparently need <span class="staffneeded"></span> staff to dig out of the hole.</p>
 
@@ -108,7 +108,7 @@ weight: 40
         // salaries = (52 * 40) * staff * hourly
         // net = ((weeks * hours * billing) - (52 * 40 * hourly)) * staff
         // 12 / ((weeks * hours * billing) - (52 * 40 * hourly)) = staff
-        var staff = Math.ceil(12 / ((weeks * hours * billing) - (52 * 40 * salary)));
+        var staff = Math.ceil(c.fixed / ((weeks * hours * billing) - (52 * 40 * salary)));
         
         var salaries = salariesForStaff(staff);
         var income = incomeFromStaff(staff, weeks, hours)
@@ -121,17 +121,6 @@ weight: 40
         vc.setDatasetIndex(1, [net]);
         vc.setDatasetIndex(2, [salaries]);
 
-        var message = "";
-        if (net <= c.get("fixed")) {
-            message = "Not there yet.";
-        } else {
-            message = String.fromCodePoint(0x1F4B5)
-                + " We cleared the $" + c.get("fixed") + "M with " 
-                + Math.floor(staff) 
-                + " staff. " 
-                + String.fromCodePoint(0x1F4B5);
-        }
-        document.getElementById("message").innerHTML = message;
         vc.update();
     };
     sliderWY.setCallbacks(callback);
