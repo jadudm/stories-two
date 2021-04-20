@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 9]><html class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+  <head>
+    <!-- Basic Page Needs
+================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+
+<!-- Mobile Specific Metas
+================================================== -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Title and meta description
+================================================== -->
+  
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://unpkg.com/d3-simple-slider"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/chart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/patternomaly@1.3.2/dist/patternomaly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
+
+<link rel="stylesheet" href="/uswds-2.11.1/css/uswds.min.css">
+
+
+<title>{{ block "title" . }}{{ end }}</title>
+
+
+<!-- CSS
+================================================== -->
+<!-- env: production -->
+
+
+  
+    <link rel="stylesheet" href="/uswds-2.11.1/css/uswds.css">
+  
+
+
+
+<!-- USWDS INIT
+================================================== -->
+<script src="/uswds-2.11.1/js/uswds-init.min.js"></script>
+    <link rel="preload" href="/uswds-2.11.1/js/uswds.min.js" as="script">
+
+  </head>
+
+
+  <body class="page-documentation-page layout-component ">
+    <a class="usa-skipnav" href="#main-content">Skip to main content</a>
+
+  
+  
+    
+  
+  <div class="usa-overlay"></div>
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+    <div class="usa-logo" id="basic-logo">
+      <em class="usa-logo__text"><a href="/" title="Home" aria-label="Home">{{ .Site.Title }}</a></em>
+    </div>
+    <button class="usa-menu-btn">Menu</button>
+  </div>
+    </div>
+  </header>
+  
+  
+    
+  
+  <div class="usa-section">
+    <div class="grid-container">
+      <div class="grid-row grid-gap">
+        <div class="usa-layout-docs__sidenav desktop:grid-col-3">
+          <nav aria-label="Secondary navigation">
+    <ul class="usa-sidenav">
+
+  {{ range $.Site.Pages.ByWeight }}
+    {{ if and (not .IsSection) (in .Permalink "docs")  }}
+        <script>console.log("- {{ .Permalink }}");</script>
+        <li class='usa-sidenav__item'> <a href="{{ .Permalink }}">{{ .Title }}</a> </li>
+    {{ end }}
+  {{ end }}
+
+    </ul>
+  </nav>
+  
+        </div>
+  
+        <main class="usa-layout-docs__main desktop:grid-col-9 usa-prose usa-layout-docs" id="main-content">
+<!-- Code that all your templates share, like a header -->
+{{ block "main" . }}
+<!-- The part of the page that begins to differ between templates -->
+{{ end }}
+
+        </main>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
