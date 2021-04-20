@@ -43,51 +43,10 @@ weight: 160
 
 
 
-<script src="{{$.Site.Params.base}}/js/const.js"></script>
-<script src="{{$.Site.Params.base}}/js/chart.js"></script>
+<script src="{{% baseurl %}}/js/const.js"></script>
+<script src="{{% baseurl %}}/js/chart.js"></script>
 <script>
     
-    /*
-var hoursLow = ((
-            PAs 
-            * {{ $.site.data.eng.PA.staff.low }} 
-            * {{ $.site.data.eng.PA.duration }} 
-            * c.hoursperweek
-            ) +
-            (
-            EIs 
-            * {{ $.site.data.eng.EI.staff.low }} 
-            * {{ $.site.data.eng.EI.duration }} 
-            * c.hoursperweek
-            ) +
-            (
-            BUs 
-            * {{ $.site.data.eng.BU.staff.low }} 
-            * {{ $.site.data.eng.BU.duration }} 
-            * c.hoursperweek
-            )
-            );
-
-        var hoursHigh = ((
-            PAs 
-            * {{ $.site.data.eng.PA.staff.high }} 
-            * {{ $.site.data.eng.PA.duration }} 
-            * c.hoursperweek
-            ) +
-            (
-            EIs 
-            * {{ $.site.data.eng.EI.staff.high }} 
-            * {{ $.site.data.eng.EI.duration }} 
-            * c.hoursperweek
-            ) +
-            (
-            BUs 
-            * {{ $.site.data.eng.BU.staff.high }} 
-            * {{ $.site.data.eng.BU.duration }} 
-            * c.hoursperweek
-            )
-            );
-*/
 </script>
 <script>
     // https://coolors.co/5f0f40-9a031e-fb8b24-e36414-0f4c5c
@@ -227,17 +186,6 @@ var hoursLow = ((
         vc.setDatasetIndex(3, [salariesLow]);
         vc.setDatasetIndex(4, [salariesHigh]);
 
-        // staffLow = (
-        //     (PAs * {{ site.data.constants.engagements.PA.staff.low }})
-        //     + (EIs * {{ site.data.constants.engagements.EI.staff.low }})
-        //     + (BUs * {{ site.data.constants.engagements.BU.staff.low }})
-        // );
-        // staffHigh = (
-        //     (PAs * {{ site.data.constants.engagements.PA.staff.high }})
-        //     + (EIs * {{ site.data.constants.engagements.EI.staff.high }})
-        //     + (BUs * {{ site.data.constants.engagements.BU.staff.high }})
-        // );
-
         staffLow = 0;
         staffHigh = 0;
 
@@ -278,30 +226,6 @@ var hoursLow = ((
 
     vc.update();
 
-    // sliderPA.width(200);
-    // sliderPA.max(100);
-    // sliderPA.default(0);
-    // sliderPA.value(0);
-
-    // sliderEI.width(200);
-    // sliderEI.max(40);
-    // sliderEI.default(0);
-    // sliderEI.value(0);
-
-    // sliderBU.width(200);
-    // sliderBU.max(10);
-    // sliderBU.default(0);
-    // sliderBU.value(0);
-
-    // sliderPA.setCallbacks(callback);
-    // sliderEI.setCallbacks(callback);
-    // sliderBU.setCallbacks(callback);
-
-    // containerPA.call(sliderPA);
-    // containerEI.call(sliderEI);
-    // containerBU.call(sliderBU);
-
-    // chartST.update();
 </script>
 
 

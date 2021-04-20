@@ -18,7 +18,7 @@ numberofstaff: 63
 
 <div class="grid-row">
     <div class="grid-col-1">
-        <img src="{{$.Site.Params.base}}/images/avatars/a14.png" />
+        <img src="{{% baseurl %}}/images/avatars/a14.png" />
     </div>
     <div class="grid-col-1"> </div>
     <div class="grid-col-10">
@@ -44,14 +44,14 @@ numberofstaff: 63
 
 <div id="staffers" class="grid-row"> </div>
 
-<script src="{{$.Site.Params.base}}/js/const.js" type="text/javascript"></script>
+<script src="{{% baseurl %}}/js/const.js" type="text/javascript"></script>
 
 <script>
     function staffRow (ndx) {
         html = '<div class="grid-row" style="margin-top: 2em; margin-bottom: 2em;">'
             + '<div class="grid-col-1">'
             + '<img '
-            + 'src="/images/avatars/a'
+            + 'src="{{% baseurl %}}/images/avatars/a'
             + _.sample(_.range(14))
             + '.png"'
             + 'alt="An avatar."'
