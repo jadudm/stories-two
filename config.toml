@@ -1,3 +1,6 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "Some Stories"
+
+[params]
+    base = "/site/jadudm/some-stories"

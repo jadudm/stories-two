@@ -26,8 +26,8 @@
 <script src="https://cdn.jsdelivr.net/npm/patternomaly@1.3.2/dist/patternomaly.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
 
-<link rel="stylesheet" href="/uswds-2.11.1/css/uswds.min.css">
-
+<!-- base: {{$.Site.Params.base}} -->
+<link rel="stylesheet" href="{{$.Site.Params.base}}/uswds-2.11.1/css/uswds.min.css">
 
 <title>{{ block "title" . }}{{ end }}</title>
 
@@ -38,15 +38,15 @@
 
 
   
-    <link rel="stylesheet" href="/uswds-2.11.1/css/uswds.css">
+    <link rel="stylesheet" href="{{$.Site.Params.base}}/uswds-2.11.1/css/uswds.css">
   
 
 
 
 <!-- USWDS INIT
 ================================================== -->
-<script src="/uswds-2.11.1/js/uswds-init.min.js"></script>
-    <link rel="preload" href="/uswds-2.11.1/js/uswds.min.js" as="script">
+<script src="{{$.Site.Params.base}}/uswds-2.11.1/js/uswds-init.min.js"></script>
+    <link rel="preload" href="{{$.Site.Params.base}}/uswds-2.11.1/js/uswds.min.js" as="script">
 
   </head>
 
@@ -82,8 +82,8 @@
 
   {{ range $.Site.Pages.ByWeight }}
     {{ if and (not .IsSection) (in .Permalink "docs")  }}
-        <script>console.log("- {{ .Permalink }}");</script>
-        <li class='usa-sidenav__item'> <a href="{{ .Permalink }}">{{ .Title }}</a> </li>
+        <script>console.log("- {{$.Site.Params.base}}{{ .Permalink }}");</script>
+        <li class='usa-sidenav__item'> <a href="{{$.Site.Params.base}}{{ .Permalink }}">{{ .Title }}</a> </li>
     {{ end }}
   {{ end }}
 
