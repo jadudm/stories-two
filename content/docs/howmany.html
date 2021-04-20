@@ -39,7 +39,7 @@ weight: 40
     var labels = ["How many staff?"];
     var datasets = [
         {
-            data: [c.get("fixed")],
+            data: [c.fixed],
             label: "The Overhead",
             backgroundColor: pattern.draw("square", "#5f0f40"), 
         },
@@ -57,7 +57,6 @@ weight: 40
 
     var ctx = document.getElementById("HMS").getContext('2d');
     vc = new VizChart("HMS", {ctx: ctx, labels: labels, datasets: datasets});
-    
     vc.update();
 </script>
 
@@ -133,7 +132,7 @@ weight: 40
                 + String.fromCodePoint(0x1F4B5);
         }
         document.getElementById("message").innerHTML = message;
-        chartHMS.update();
+        vc.update();
     };
     sliderWY.setCallbacks(callback);
     sliderHW.setCallbacks(callback);

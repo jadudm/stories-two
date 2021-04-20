@@ -6,6 +6,9 @@ weight: 60
 
 <div class="grid-row grid-gap">
     <div class="grid-col-6">
+        <iframe width="100%" height="315" src="https://www.youtube.com/embed/m_MaJDK3VNE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="grid-col-6">
        <p>
            <em>Such a good commercial</em>. It's like Ansel Adams met the Pythons.
        </p>
@@ -29,9 +32,6 @@ weight: 60
             How many more staff do we need to cover the cost of having management?
         </p>
     </div>
-    <div class="grid-col-6">
-        <iframe width="100%" height="315" src="https://www.youtube.com/embed/m_MaJDK3VNE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
 </div>
 
 
@@ -54,14 +54,12 @@ weight: 60
 <script src="/js/const.js"></script>
 <script src="/js/chart.js"></script>
 
-{% include chart id="SH" %}
-{% include slider id="SH" chart="SH" %}
-
 <script>
     // https://coolors.co/5f0f40-9a031e-fb8b24-e36414-0f4c5c
-    chartSH.data.datasets = [
+    var labels = ["How many staff?"] 
+    var datasets = [
         {
-            data: [12],
+            data: [c.get("fixed")],
             label: "The Overhead",
             backgroundColor: pattern.draw("square", "#5f0f40"), 
         },
@@ -81,19 +79,19 @@ weight: 60
             backgroundColor: pattern.draw("zigzag-horizontal", "#e36414")
         }
     ]
-    chartSH.label = "";
 
-    chartSH.options.title = { display: true, text: "How Many Staff?" };
-    chartSH.options.legend = { display: true };
+    var ctx = document.getElementById("SH").getContext('2d');
+    vc = new VizChart("SH", {ctx: ctx, labels: labels, datasets: datasets});
+    vc.update();
 
     function billedFromStaff (staff) {
         // Hours * Hourly rate / 1M (for scaling)
-        var income = staff * (48 * 32 * {{ site.data.constants.hourly }});
+        var income = staff * (48 * 32 * c.get("hourlyrate"));
         return income;
     }
 
     function salariesForStaff (staff) {
-        var salaries = staff * (52 * 40 * {{ site.data.constants.salary }});
+        var salaries = staff * (52 * 40 * c.get("salary"));
         return salaries;
     }
 
@@ -108,35 +106,42 @@ weight: 60
         var salaries = salariesForStaff(staff);
         var net = income - (salaries + wranglerCost(5));
 
-        chartSH.data.datasets[1].data = [  net ];
-        chartSH.data.datasets[2].data = [ salaries ];
+        vc.setDatasetIndex(1, [net]);
+        vc.setDatasetIndex(2, [salaries]);
 
         var message = "";
-        if (net < {{ site.data.constants.fixed }}) {
+        if (net < c.get("fixed")) {
             message = "Not there yet.";
         } else {
             message = String.fromCodePoint(0x1F4B5)
-                + "&nbsp; We cleared the ${{ site.data.constants.fixed }}M with " 
+                + "&nbsp; We cleared the $" + c.get("fixed") + "M with " 
                 + Math.floor(staff) 
                 + " staff. " 
                 + String.fromCodePoint(0x1F4B5);
         }
         document.getElementById("message").innerHTML = message;
-        chartSH.update();
+        vc.update();
     };
 
-    sliderSH.min(0);
-    sliderSH.max(100);
-    sliderSH.setCallbacks(callback);
-    containerSH.call(sliderSH);
-    sliderSH.value(55);
-    chartSH.update();
+    scfg = {width: 200, 
+        callback: callback, 
+        min: 0,
+        max: 120,
+        value: 55,
+    };
+
+    var slider = new VizSlider("SH", scfg);
+    vc.update();
+    // sliderSH.min(0);
+    // sliderSH.max(100);
+    // sliderSH.setCallbacks(callback);
+    // containerSH.call(sliderSH);
+    // sliderSH.value(55);
+    // chartSH.update();
 </script>
 
-{% capture more %}
-
 <p>
-    Currently, 18F utilizes a model where 1) we rotate leadership positions, and 2) they are not full-time.
+    Currently, 18F utilizes a model where 1) we rotate leadership positions, and 2) they are not (consistently, always) full-time.
 </p>
 
 <p>
@@ -151,6 +156,3 @@ weight: 60
     I think rotating leadership positions is an excellent idea. A better model might be to staff more junior members of staff to leadership positions, with the outgoing Director serving as a mentor. This would provide greater continuity. However, it likely requires that 18F finds a way to hire more 4/4 staff, and fewer 2/2s.
 </p>
 
-
-{% endcapture %}
-{% include tellme prompt="on management" more=more %}

@@ -1,0 +1,24 @@
+var engagements = {};
+{{ range $.Site.Data.eng }}
+    console.log("{{.}}")
+    
+    var inner = {};
+    {{- range $key, $value := . -}}
+        // console.log("{{ $key }}")
+        {{ if eq (printf "%T" $value) "map[string]interface {}" }}
+            var inner2 = {};
+
+            {{- range $k2, $v2 := . -}}
+                inner2.{{ $k2 }} = {{ $v2 }}
+            {{ end }}
+
+            inner.{{ $key }} = inner2;
+        {{ else if  eq (printf "%T" $value) "int" }}
+            inner.{{ $key }} = {{ $value }};
+        {{ else }}
+            inner.{{ $key }} = "{{ $value }}";
+        {{ end }}
+    {{ end }}
+    engagements.{{ .abbr }} = {};
+    Object.assign(engagements.{{ .abbr }}, inner);
+{{ end }}

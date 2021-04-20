@@ -1,0 +1,31 @@
+
+<div class="grid-row">
+    <div class="grid-col-4">
+        <p>
+            As we engage in these projects (path analyses, exploration and iteration, etc.), we invoice time and bill against the project.
+        </p>
+        <p>
+            Cost recoverability comes through billing hours on projects. <b>The knob is projects, not people</b>.
+        </p>
+    </div>
+    <div class="grid-col-8 center">
+        <table class="usa-table">
+            <tr>
+                <td> <b>Engagement</b> </td>
+                <td> <b>Abbr.</b> </td>
+                <td> <b>Duration</b> </td>
+                <td> <b>Staff</b> </td>
+                <td> <b>Value</b> </td>
+            </tr>
+            {{ range $.Site.Data.eng }}
+                <tr>
+                    <td> {{ .name }} </td>
+                    <td> {{ .abbr }} </td>
+                    <td> {{ .duration }}w </td>
+                    <td> {{ .staff.low }}-{{ .staff.high }} </td>
+                    <td> {{ mul .value 1000 }}K </td>
+                </tr>
+            {{ end }}
+        </table>
+    </div>
+</div>

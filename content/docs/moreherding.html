@@ -1,0 +1,135 @@
+---
+title: More Wranglers
+weight: 70
+---
+
+<p>I'll take this one step further.</p>
+
+<p>How about, along with director-level positions, we have one "group lead" for every 20 people. </p>
+
+<p>Some mid-level wranglers to provide touchstones for mentorship, learning, cohesion, and the like are probably necessary.</p>
+
+<p>What does that do to the picture?</p>
+
+
+<div class="grid-row" style="padding-top: 3em;">
+    <div class="grid-col-12" style="display: flex; justify-content: center;">
+        <p><small>Staff</small></p>
+       <div id="sliderSH"></div>
+    </div>
+</div>
+<div class="grid-row">
+    <canvas id="SH"></canvas>
+</div>
+<div class="grid-row" style="display: flex; justify-content: center; margin: 2em;">
+    <div id="message" style="align: text-center;">
+    &nbsp;
+    </div>
+</div>
+
+<script src="/js/const.js"></script>
+<script src="/js/chart.js"></script>
+
+
+<script>
+    // https://coolors.co/5f0f40-9a031e-fb8b24-e36414-0f4c5c
+    var labels = ["How many staff?"] 
+    var datasets = [
+        {
+            data: [c.fixed],
+            label: "The Overhead",
+            backgroundColor: pattern.draw("square", "#5f0f40"), 
+        },
+        {
+            data: [0],
+            label: "Net Income",
+            backgroundColor: pattern.draw("circle", "#9a031e"),
+        },
+        {
+            data: [0],
+            label: "The Salaries",
+            backgroundColor: pattern.draw("diamond", "#fb8b24")
+        },
+        {
+            data: [ wranglerCost(5) ],
+            label: "The Wranglers",
+            backgroundColor: pattern.draw("zigzag-horizontal", "#e36414")
+        }
+    ];
+
+    var ctx = document.getElementById("SH").getContext('2d');
+    vc = new VizChart("SH", {ctx: ctx, labels: labels, datasets: datasets});
+    vc.update();
+    
+    function billedFromStaff (staff) {
+        // Hours * Hourly rate / 1M (for scaling)
+        var income = staff * (48 * 32 * c.get("hourlyrate"));
+        return income;
+    }
+
+    function salariesForStaff (staff) {
+        var salaries = staff * (52 * 40 * c.get("salary"));
+        return salaries;
+    }
+
+    function wranglerCost (count) {
+        return salariesForStaff(count);
+    }
+
+    function callback (staff) {
+        // Calc hours from staff
+        // Set the income.
+        var income = billedFromStaff(staff);
+        var salaries = salariesForStaff(staff);
+        var leads = Math.ceil(staff / 20);
+        var net = income - (salaries + wranglerCost(5) + wranglerCost(leads));
+
+        vc.setDatasetIndex(1, [net]);
+        vc.setDatasetIndex(2, [salaries]);
+        vc.setDatasetIndex(3, [ wranglerCost(5 + leads) ]);
+
+        var message = "";
+        if (net < c.get("fixed")) {
+            message = "Not there yet.";
+        } else {
+            message = String.fromCodePoint(0x1F4B5)
+                + "&nbsp; We cleared the $" + c.fixed + "M with " 
+                + Math.ceil(staff) 
+                + " staff and "
+                + Math.ceil(5 + leads)
+                + " wranglers. " 
+                + String.fromCodePoint(0x1F4B5);
+        }
+        document.getElementById("message").innerHTML = message;
+        document.getElementById("newstaff").innerHTML = staff;
+        document.getElementById("wranglers").innerHTML = 5 + leads;
+        vc.update();
+    };
+
+    
+    scfg = {width: 400, 
+        callback: callback, 
+        min: 0,
+        max: 120,
+        value: 55,
+    };
+
+    var slider = new VizSlider("SH", scfg);
+    vc.update();
+    callback(55);
+
+    // sliderSH.min(0);
+    // sliderSH.max(100);
+    // sliderSH.setCallbacks(callback);
+    // containerSH.call(sliderSH);
+    // sliderSH.value(55);
+    // chartSH.update();
+</script>
+
+<p>
+    This increases 18F's overhead burden. We went from needing <span class="howmanystaff"></span> staff to <span id="newstaff"></span> staff, and we carry <span id="wranglers"></span> wranglers as a result.
+</p>
+
+<p>
+    If this feels like "too much management," that's OK. It's a model, and by <em>over-estimating</em> management costs, my result is a conservative estimate of what it takes to achieve cost recoverability.
+</p>
